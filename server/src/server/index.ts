@@ -1,11 +1,12 @@
 import WsServer from './WsServer';
+import SimpleServer from './WsServer';
 
-let server: WsServer;
-const PORT = parseInt(process.env.PORT || "8080", 10);
+let server: WsServer | null = null;
 
-export default (): WsServer => {
+export const getServer = () => {
   if (server) return server;
-
-  server = new WsServer(PORT);
+  server = new WsServer(parseInt(process.env.PORT || '8080'))
   return server;
 }
+
+export { WsServer, SimpleServer };

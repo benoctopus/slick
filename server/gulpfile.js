@@ -44,7 +44,7 @@ const compile = () => {
 
       if (err) util.log('\n--- Error ---\n'.red, JSON.stringify(err.red));
 
-      util.log('\n--- Compile Result ---\n'.green);
+      util.log('\n--- Compile Complete! ---\n'.rainbow);
 
       util.log(
         '\n--- Warnings --- \n\n'.yellow, 
@@ -80,7 +80,8 @@ gulp.task('default', () => {
         recompile = true;
         return;
       };
-    
+      
+      util.log('--- Compiling ---'.blue);
       return compile();
     }
   )
