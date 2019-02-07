@@ -1,5 +1,9 @@
 FROM node:alpine
 
+EXPOSE 80
+
+ENV PORT=80
+
 RUN apk add --no-cache tini
 RUN chmod +x /sbin/tini
 
