@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\" \"npm run nginx:dev\"",
+    "postinstall": "concurrently \"cd client && npm install\" \"cd server && npm install\"",
     "nginx:dev": "cd nginx/dev && docker build -t rp . && docker container run --name rp --rm --network host rp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
