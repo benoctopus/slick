@@ -3,11 +3,11 @@ import React from "react";
 import "../styles/layout.scss";
 import Sidebar from "./Sidebar";
 
-interface LayoutProps {
-  children: JSX.Element;
-}
+// interface LayoutProps {
+//   children: JSX.Element;
+// }
 
-const Layout = ({ children }: LayoutProps) => (
+const Layout = () => (
   <div className="layout-root">
     <AppBar className="header-root" position="static" elevation={12}>
       <Typography component="h1" className="header-title">
