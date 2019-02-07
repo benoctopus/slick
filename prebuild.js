@@ -1,5 +1,9 @@
+// export the static version of the react app
+
 const path = require('path');
 const mv = require('mv');
+const fs = require('fs');
+const colors = require('colors');
 const { exec: _exec } = require('child_process');
 
 const clientPath = path.join(__dirname, 'client');
@@ -11,8 +15,8 @@ const exec = command => new Promise(resolve => {
   const proc = _exec(command);
 
   // route output streams to main process output
-  proc.stdout.on('data', chunk => process.stdout.write(chunk))
-  proc.stderr.on('data', chunk => process.stderr.write(chunk))
+  proc.stdout.on('data', chunk => process.stdout.write(chunk.green))
+  proc.stderr.on('data', chunk => process.stderr.write(chunk.red))
 
   proc.on('close', code => {
     // throw an error if the process doesnt exit cleanly
@@ -22,24 +26,25 @@ const exec = command => new Promise(resolve => {
   })
 })
 
-const tast = (async () => {
+const task = (async () => {
   try {
     // run next build && export
-    await exec(`cd ${clientPath} && npm run export`);
+    if (fs.existsSync(destination)) await exec(`rm -rf ${destination}`);
+    await exec(`cd ${clientPath} &&  NODE_ENV=production npm run export`);
 
+    // move output to nginx dir
     return new Promise(resolve => mv(
-      clientPath, 
+      clientOutput, 
       destination, 
       { mkdirp: true },
       err => {
         if (err) throw err;
-        process.exit(0)
       }
     ))
   } catch (err) {
-    console.log(error);
+    console.log(err);
     process.exit(1);
-  } finally {
-    return;
-  }
+  } 
 })()
+
+task.then(() => process.exit(0));
