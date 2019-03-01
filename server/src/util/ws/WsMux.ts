@@ -1,13 +1,15 @@
-import { Router, WebsocketMethod, WebsocketRequestHandler } from 'express-ws';
+import { Router, WebsocketMethod } from 'express-ws';
 
 class WsMux {
   public path: string;
-  // private ws: WebsocketRequestHandler;
+  public connections: { [key: string]: UserConnection } = {};
 
   constructor(wsRoute: WebsocketMethod<Router>, path: string) {
     this.path = path;
     wsRoute(path, (ws, req) => {
-      console.log(req);
+      ws.on('open', () => {
+
+      })
       ws.on("message", (msg) => {
         console.log(msg);
       })

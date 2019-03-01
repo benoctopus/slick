@@ -1,15 +1,15 @@
 import * as express from 'express';
 
 export default class SimpleServer {
-  private _port: number;
-  private _started: boolean = false;
+  protected _port: number;
+  protected _started: boolean = false;
   protected _app: express.Application;
 
   static express = express;
   static Router = express.Router;
 
-  constructor(port: number) {
-    this._port = port;
+  constructor(PORT: number) {
+    this._port = PORT;
     this._app = express();
   }
 

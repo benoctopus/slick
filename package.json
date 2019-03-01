@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\" \"npm run nginx:dev\"",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\" \"npm run containers:dev\"",
     "postinstall": "concurrently \"cd client && npm install\" \"cd server && npm install\"",
-    "nginx:dev": "cd nginx/dev && docker build -t rp . && docker container run --name rp --rm --network host rp",
+    "containers:dev": "cd dev && docker-compose kill && docker-compose rm -f && docker-compose up",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
