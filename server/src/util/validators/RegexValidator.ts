@@ -15,6 +15,7 @@ const getRegexValidator = (
     }
   )
 
+
 export default class RegexTest extends Validator<string> {
   constructor(item: string, regex: RegExp, errorData: IValidationErrorInfo) {
     super(item, getRegexValidator(regex, errorData))

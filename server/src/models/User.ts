@@ -1,31 +1,51 @@
 import BaseModel from './BaseModel';
-import { hash, compare } from '../util/hash';
+// import { hash, compare } from '../util/hash';
+import UserValidatorSuite from '../util/validators/UserValidatorSuite';
 
-interface IUserCreation {
+export interface IUserBase {
+  username: string;
+}
+
+export interface IUserCreation extends IUserBase {
   username: string;
   password: string;
 }
 
+export interface IUserRecovered extends IUserBase {
+  username: string;
+  passwordHash: string
+}
 
 export default class User extends BaseModel {
   public username?: string;
   private passwordHash?: string;
   private password?: string;
 
+  // create or Recover
+
   constructor(data: IUserCreation) {
     super(true);
-
-    if (data.username && !this.validateUsername(data.username))
-      this.username = data.username;
-
-    if (data.password && !this.validatePassword(data.password))
-      hash(data.password).then((hashed) => { this._passwordHash = hashed })
+    this.validate(data)
+    this.username = data.username;
+    this.password = data.password;
   }
 
-  //Todo: implement validators
+  public validate = (data: IUserCreation): boolean => {
+    const validationSuite: UserValidatorSuite = (
+      (new UserValidatorSuite(data)).validate()
+    );
 
+    if (!!validationSuite.errors.length) throw validationSuite.errors[0];
+    return true;
+  }
 
-  protected validateUsername = (username: string): undefined | ValidationError => undefined;
-  protected validatePassword = (username: string): undefined | ValidationError => undefined;
-  protected validate = (user: IUserCreation): null | ValidationError[]
+  public save = async () => {
+    try {
+
+      console.log('hello');
+
+    } catch (err) {
+      throw err;
+    }
+  }
 }

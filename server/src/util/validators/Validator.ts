@@ -28,7 +28,7 @@ export default abstract class Validator<t> {
       this.passing = true;
     }
 
-    return this.passing;
+    return this;
   }
 
 }

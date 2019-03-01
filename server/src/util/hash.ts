@@ -7,6 +7,6 @@ export const hash = (password: string) => new Promise(resolve => {
   })
 })
 
-export const comparePass = async (password: string, hashed: string) => {
+export const compare = async (password: string, hashed: string) => {
   return hashed === await hash(password);
 }
