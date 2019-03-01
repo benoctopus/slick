@@ -1,5 +1,5 @@
 
-interface IValidationErrorInfo {
+export interface IValidationErrorInfo {
   propertyName: string;
   userMessage: string;
 }
