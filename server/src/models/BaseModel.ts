@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid/v4'
 
-export default class BaseModel {
+export default abstract class BaseModel {
   public id: string | number;
   protected static idCount: number = 0;
 
@@ -13,6 +13,7 @@ export default class BaseModel {
     return BaseModel.idCount++;
   }
 
+  //TODO: set up neo4j and implement instance getter
   // protected get neoD() { return new }
 
 }
