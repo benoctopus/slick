@@ -1,4 +1,5 @@
 import * as uuidv4 from 'uuid/v4'
+import Neo from '../config/db/Neo';
 
 export default abstract class BaseModel {
   public id: string | number;
@@ -13,7 +14,7 @@ export default abstract class BaseModel {
     return BaseModel.idCount++;
   }
 
-  //TODO: set up neo4j and implement instance getter
-  // protected get neoD() { return new }
-
+  public static getDbSession = (): Neo => {
+    return new Neo();
+  }
 }

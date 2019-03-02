@@ -25,12 +25,12 @@ export default class User extends BaseModel {
 
   constructor(data: IUserCreation) {
     super(true);
-    this.validate(data)
+    User.validate(data)
     this.username = data.username;
     this.password = data.password;
   }
 
-  public validate = (data: IUserCreation): boolean => {
+  public static validate = (data: IUserCreation): boolean => {
     const validationSuite: UserValidatorSuite = (
       (new UserValidatorSuite(data)).validate()
     );
@@ -41,9 +41,11 @@ export default class User extends BaseModel {
 
   public save = async () => {
     try {
-
-      console.log('hello');
-
+      const session = User.getDbSession();
+      console.log(session.run)
+      const res = await session.run('MERGE (james:Person {name : {nameParam} }) RETURN james.name AS name', { nameParam: 'James' }).then(data => console.log(data))
+      session.close();
+      return res;
     } catch (err) {
       throw err;
     }

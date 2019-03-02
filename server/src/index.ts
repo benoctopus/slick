@@ -1,13 +1,10 @@
 import { getServer } from './server';
-import { User } from './models';
+import User from './models/User';
 
 const user = new User({
-  username: 'Bennyoctopus',
+  username: 'Benoctopus',
   password: 'Pass123!'
-})
+}).save().then((data) => console.log(data));
 
-console.log('user', user);
 
-const server = getServer();
-
-server.listen();
+getServer().listen();
