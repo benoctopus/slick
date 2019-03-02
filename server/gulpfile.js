@@ -1,11 +1,14 @@
 const gulp = require('gulp');
 const util = require('gulp-util');
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const config = require('./webpack.config');
 const colors = require('colors');
+const ts = require('gulp-typescript');
 const { exec } = require('child_process');
 
+process.stdout.setEncoding('utf8')
 let compiling = false;
 let recompile = false;
 let runtime = null;
@@ -68,9 +71,36 @@ const compile = () => {
   })
 }
 
-gulp.task('default', () => {
-  util.log('--- server development mode ---\n'.green);
+const rm = (path) => new Promise(resolve => {
+  fs.unlink(path, (err) => {
+    if (err) throw err;
+    resolve();
+  })
+})
 
+const rmrf = async (p) => {
+  const items = fs.readdirSync(p);
+  const len = items.length;
+
+  for (let i = 0; i < len; i += 1) {
+    const item = items[i];
+    const itemPath = path.join(p, item);
+    if (fs.statSync(itemPath).isDirectory())
+      await rmrf(itemPath) 
+    else
+      rm(itemPath)
+  }
+
+  return new Promise(resolve => {
+    fs.rmdir(p, (err) => {
+      if (err) throw err;
+      resolve();
+    })
+  });
+}
+
+gulp.task('dev', () => {
+  util.log('--- server development mode ---\n'.green);
   compile();
 
   return gulp.watch(
@@ -86,3 +116,31 @@ gulp.task('default', () => {
     }
   )
 })
+
+gulp.task('compileToTmp', () => {
+  const proj = ts.createProject(path.join(__dirname, 'tsconfig.lax.json'));
+  const dest = path.join(__dirname, 'tmp');
+  return proj.src().pipe(proj()).js.pipe(gulp.dest(dest))
+})
+
+gulp.task('cleanTmp', () => rmrf(path.join(__dirname, 'tmp')))
+
+gulp.task('mocha', () => new Promise(resolve => { 
+  const mocha = path.resolve(
+    __dirname, 
+    'node_modules', 
+    'mocha', 
+    'bin', 
+    'mocha'
+  )
+
+  const proc = exec(`node ${mocha} tmp/**/*.test.js`);
+  let output = [];
+  proc.stdout.on('data', (chunk) => process.stdout.write(chunk.toString().blue))
+  proc.stderr.on('data', (chunk) => process.stderr.write(chunk.toString().red))
+  proc.on('close', () => resolve());
+}))
+
+gulp.task(
+  'test', 
+  gulp.series('compileToTmp', 'mocha', 'cleanTmp'))

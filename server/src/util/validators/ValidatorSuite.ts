@@ -7,9 +7,11 @@ export interface ValidatorSuiteConstructor<t> {
   new(data: t): ValidatorSuite<t>;
 }
 
+export type ValidatorMap = { [key: string]: ValidatorConstructor<any> }
+
 export default abstract class ValidatorSuite<t> {
   public errors: ValidationError[] = [];
-  public validators: { [key: string]: ValidatorConstructor<{}> } = {};
+  public validators: { [key: string]: ValidatorConstructor<any> } = {};
   protected data: t & mp;
 
   constructor(data: t & mp) {

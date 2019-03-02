@@ -2,7 +2,8 @@ import RegexValidator from './RegexValidator';
 import { IValidationErrorInfo } from '../errors/ValidationError';
 import { ICompleteValidator } from './Validator';
 import { IUserCreation } from '../../models/User'
-import { ValidatorSuite } from '.';
+import { ValidatorSuite, ValidatorConstructor } from '.';
+import { ValidatorMap } from './ValidatorSuite';
 
 let userRegex = /^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){6,18}[a-zA-Z0-9]$/;
 let usernameErrorInfo: IValidationErrorInfo = {
@@ -39,7 +40,7 @@ export class PasswordValidator extends RegexValidator implements ICompleteValida
 }
 
 export default class UserValidatorSuite extends ValidatorSuite<IUserCreation> {
-  public validators = {
+  public validators: ValidatorMap = {
     username: UsernameValidator,
     password: PasswordValidator
   }

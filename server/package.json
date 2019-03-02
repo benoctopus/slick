@@ -5,8 +5,8 @@
   "main": "webpack.config.js",
   "scripts": {
     "build": "webpack",
-    "dev": "NODE_ENV=development gulp",
-    "test": "mocha -r ts-node/register src/**/*.test.ts"
+    "dev": "NODE_ENV=development gulp dev",
+    "test": "NODE_ENV=test gulp test"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-ws": "^4.0.0",
+    "gulp-typescript": "^5.0.0",
     "neo4j-driver": "^1.7.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
